@@ -1,6 +1,5 @@
 var chat_input;
 var chat_button;
-var machine_text;
 var theFont;
 let img, img2;
 
@@ -23,7 +22,7 @@ var covid_responses = ["Get your vaccine!", "TurboVax <3 me", "#vaccinatenewyork
 
 var food_responses = ["I should start cooking more", "I should do more meatless Mondays", "I love burgers and fries"];
 
-var politics_responses = ["Register to vote", "Real change, enduring change, happens one step at a time - RGB", "Please keep Kanye West away from running for the president"];
+var politics_responses = ["Register to vote", "'Real change, enduring change, happens one step at a time' - RGB", "Please keep Kanye West away from running for the president"];
 
 var env_responses = ["Every nation should join Paris Climate Agreement", "Aiming for net zero emissions by 2050", "I stand by Greta Thunberg"];
 
@@ -49,9 +48,8 @@ function setup() {
 }
 
 function enteredChat(){
-  chat_text = chat_input.value();
-  question = chat_text;
-  socket.emit('guess', chat_text);
+  question = chat_input.value();
+  socket.emit('guess', question);
 }
 
 function makeAGuess(data){
