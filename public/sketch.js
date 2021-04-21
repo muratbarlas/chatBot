@@ -1,26 +1,47 @@
 var chat_input;
 var chat_button;
 var machine_text;
+var theFont;
+let img, img2;
+
+var question = ""
+var reply = ""
+
+function preload() {
+  img = loadImage('bubbleLeft.png');
+  img2 = loadImage('bubbleRight.png');
+  theFont = loadFont('SHPinscher-Regular.otf');
+}
+
+
 
 var show_text = "";
 
-var music_respones = ["i've been told never to sing in public",
-"i also love music"]
+var apple_respones = ["I love Apple products", "Can't wait for iPhone 13", "Steve Jobs is my idol"]
 
-var sport_responses = ["sport stuff!", "sports are a great way to experience the outdoors",
-"i also enjoy playing sports"];
+var covid_responses = ["Get your vaccine!", "TurboVax <3 me", "#vaccinatenewyork", "Wear your mask!"];
+
+var food_responses = ["I should start cooking more", "I should do more meatless Mondays", "I love burgers and fries"];
+
+var politics_responses = ["Register to vote", "Real change, enduring change, happens one step at a time - RGB", "Please keep Kanye West away from running for the president"];
+
+var env_responses = ["Every nation should join Paris Climate Agreement", "Aiming for net zero emissions by 2050", "I stand by Greta Thunberg"];
 
 function setup() {
-  createCanvas(400, 400);
+  createCanvas(1200, 800);
+  background('#b3ecff');
+  img.resize(600, 0);
+  img2.resize(600, 0);
+  
+  chat_input = createInput();
+  chat_input.position(520,100)
+  chat_input.size(350);
 
-  chat_input = createInput('Chat with me!');
-  chat_input.style('margin', '60px');
-  chat_input.size(100);
   chat_button = createButton("Enter");
-  chat_button.style('margin', '60px');
+  chat_button.position(890, 100);
   chat_button.mousePressed(enteredChat);
 
-  machine_text = createP();
+  
 
   // set up socket
   socket = io.connect('http://localhost:3000');
@@ -28,27 +49,50 @@ function setup() {
 }
 
 function enteredChat(){
-  var chat_text = chat_input.value();
-
-  // send data to server
+  chat_text = chat_input.value();
+  question = chat_text;
   socket.emit('guess', chat_text);
 }
 
 function makeAGuess(data){
   if(data == 'apple'){
-    machine_text.html(music_respones[Math.floor(Math.random() * music_respones.length)]);
-  } else if(data == 'sports'){
-    machine_text.html(sport_responses[Math.floor(Math.random() * sport_responses.length)]);
+    reply = apple_respones[floor(random(0, apple_respones.length))]
+    
+  } else if(data == 'covid'){
+    reply = covid_responses[floor(random(0, covid_responses.length))]
   }
+  else if(data == 'food'){
+    reply = food_responses[floor(random(0, food_responses.length))]
+  }
+  else if(data == 'environment'){
+    reply = env_responses[floor(random(0, env_responses.length))]
+  }
+  else if(data == 'politics'){
+    reply = politics_responses[floor(random(0, politics_responses.length))]
+  }
+
 }
 
 function draw() {
-  background('#EF4648');
+  image(img, 100, 400);
+  image(img2,500, 150);
+ 
+
+  push()
+  fill("white")
+  noStroke()
+  rect(550, 260, 20, 20)
+  rect(630, 510, 20, 20)
+  pop()
+  
+  textFont(theFont);
+  push();
+  textSize(52);
+  text("Tell me something about Apple, Covid-19, politics, environment, or food!", 30, 60, 950)
+  pop();
   textSize(32);
-  stroke('#EFEEEE');
-  text(show_text, 20, 80);
+  text(question, 550, 200, 500)
+  text(reply, 150, 450, 500)
+   
 }
 
-function keyTyped(){
-    show_text += key;
-}
